@@ -2,10 +2,15 @@ import tkinter as tk
 from tkinter import Canvas, filedialog, Label, Button
 from PIL import Image, ImageTk
 import tensorflow as tf
-from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input, decode_predictions
+# from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input, decode_predictions
+from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array, load_img
 import numpy as np
 import cv2
+
+def load_model(self):
+    model = load_model('thai_fruit_model.h5')
+    return model
 
 class ThaiFruitRecognizer:
     def __init__(self, root):
