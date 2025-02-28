@@ -1,16 +1,10 @@
 import tkinter as tk
 from tkinter import Canvas, filedialog, Label, Button
 from PIL import Image, ImageTk
-import tensorflow as tf
-# from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input, decode_predictions
+import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array, load_img
-import numpy as np
-import cv2
-
-def load_model(self):
-    model = load_model('thai_fruit_model.h5')
-    return model
+from tensorflow.keras.applications.vgg16 import VGG16, preprocess_input, decode_predictions
 
 class ThaiFruitRecognizer:
     def __init__(self, root):
@@ -18,8 +12,8 @@ class ThaiFruitRecognizer:
         self.root.title("Thai Fruit Recognizer")
         self.root.geometry("800x600")
         
-        # Initialize the AI model
-        self.model = self.load_model()
+        # Load the AI model
+        self.model = VGG16(weights='imagenet')
 
         # Create Browse button
         self.browse_button = Button(self.root, text="Browse Image", command=self.browse_image)
@@ -40,14 +34,6 @@ class ThaiFruitRecognizer:
         # Store the path of the selected image
         self.image_path = None
 
-    def load_model(self):
-        """
-        Load the pre-trained ResNet50 model.
-        For Thai fruit recognition, you should fine-tune this model with your dataset.
-        """
-        model = ResNet50(weights='imagenet')
-        return model
-
     def browse_image(self):
         """
         Browse and select an image file.
@@ -65,7 +51,6 @@ class ThaiFruitRecognizer:
         """
         Display the selected image on the canvas.
         """
-        # Open and resize the image
         img = Image.open(path)
         img = img.resize((400, 400))
         self.photo = ImageTk.PhotoImage(img)
@@ -92,9 +77,8 @@ class ThaiFruitRecognizer:
         predictions = self.model.predict(processed_image)
         decoded_preds = decode_predictions(predictions, top=3)[0]
         
-        # For demonstration, we'll display the top prediction
+        # Display the top prediction
         if decoded_preds:
-            # In a real scenario, map ImageNet classes to your Thai fruit classes
             label = decoded_preds[0][1].replace('_', ' ').title()
             confidence = decoded_preds[0][2] * 100
             result_text = f"Prediction: {label}\nConfidence: {confidence:.2f}%"

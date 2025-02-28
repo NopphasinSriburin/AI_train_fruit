@@ -24,6 +24,6 @@ train_it = datagen.flow_from_directory('D:\scr/AI_train_fruit/archive', class_mo
 	batch_size=16, target_size=(224, 224))
 test_it = datagen.flow_from_directory('D:\scr/AI_train_fruit/archive', class_mode='binary',
 	batch_size=16, target_size=(224, 224))
-model.fit(train_it, steps_per_epoch=len(train_it),validation_data=test_it,	epochs=3, verbose=1)
+model.fit(train_it, steps_per_epoch=len(train_it),validation_data=test_it,	epochs=90, verbose=1)
 
-model.save('D:/scr/AI_train_fruit/apple_model.h5')
+model.save('D:/scr/AI_train_fruit/fruit.h5')
