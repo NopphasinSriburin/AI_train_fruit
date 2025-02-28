@@ -48,7 +48,7 @@ model = models.Sequential([
     
     layers.Flatten(),
     layers.Dense(512, activation='relu'),
-    layers.Dense(5, activation='softmax')  # จำนวนคลาส 5 (ผลไม้ไทย 5 ชนิด)
+    layers.Dense(6, activation='softmax') # 6 คลาส (5 ผลไม้ + 1 อื่นๆ)
 ])
 
 # คอมไพล์โมเดล

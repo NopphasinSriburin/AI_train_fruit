@@ -1,78 +1,79 @@
-import tkinter as tk
+import customtkinter as ctk
 from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk
 import tensorflow as tf
 import numpy as np
 
-# Function to browse and select an image file
+# โหลดโมเดล AI
+model = tf.keras.models.load_model('thai_fruit_model.h5')
+class_names = ['jackfruit', 'long kong','Muntingia', 'Pineapple', 'rambutan', 'sapodilla']
+
+# ฟังก์ชันเลือกรูปภาพ
 def browse_image():
     file_path = filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg;*.png;*.jpeg")])
     if file_path:
         load_image(file_path)
 
-# Function to load and display the selected image
+# ฟังก์ชันโหลดและแสดงภาพ
 def load_image(file_path):
     img = Image.open(file_path)
-    img = img.resize((200, 200))  # Resize image to fit the display
+    img = img.resize((250, 250))
     img = ImageTk.PhotoImage(img)
-    panel.config(image=img)
-    panel.image = img  # Store the image in the panel
+    panel.configure(image=img)
+    panel.image = img
     global image_path
     image_path = file_path
 
-# Function to recognize the fruit from the selected image
+# ฟังก์ชันทำนายผลไม้
 def recognize_image():
     if not image_path:
         messagebox.showerror("Error", "Please select an image first.")
         return
 
-    # Load and preprocess the image
-    img = Image.open(image_path)
-    img = img.resize((224, 224))  # Resize the image to match the model input size
-    img_array = np.array(img) / 255.0  # Normalize pixel values to [0, 1]
-    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
+    img = Image.open(image_path).resize((224, 224))
+    img_array = np.array(img) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
 
-    # Make predictions
     predictions = model.predict(img_array)
-    predicted_class = np.argmax(predictions)  # Get the index of the highest prediction
-    confidence = np.max(predictions) * 100  # Get the confidence as a percentage
+    predicted_class = np.argmax(predictions)
+    confidence = np.max(predictions) * 100
 
-    # Display the result
     fruit_name = class_names[predicted_class]
-    result_label.config(text=f"Predicted Fruit: {fruit_name}\nConfidence: {confidence:.2f}%")
+    result_label.configure(text=f"🍍 ผลไม้ที่ทำนาย: {fruit_name}\n🎯 ความมั่นใจ: {confidence:.2f}%")
 
-# Load the trained AI model
-model = tf.keras.models.load_model('thai_fruit_model.h5')
+# สร้างหน้าต่าง GUI
+ctk.set_appearance_mode("light")  # โหมดแสง
+ctk.set_default_color_theme("blue")  # ธีมสี
 
-# Class names for fruits (English)
-class_names = ['jackfruit', 'long kong', 'Pineapple', 'rambutan', 'sapodilla']
+window = ctk.CTk()
+window.title("🌿 AI Fruit Recognizer")
+window.geometry("450x600")
 
-# Create the GUI window
-window = tk.Tk()
-window.title("AI Fruit Recognizer")
+# พื้นหลัง Gradient
+bg_frame = ctk.CTkFrame(window, fg_color=("Yellow", "Yellow"))
+bg_frame.pack(fill="both", expand=True)
 
-# Set the window size and background color
-window.geometry("400x500")
-window.config(bg="#f5f5f5")
+# หัวข้อโปรแกรม
+title_label = ctk.CTkLabel(bg_frame, text="🍉 โปรแกรมแยกประเภทผลไม้ 🍌", text_color="black", font=("Arial", 18, "bold"))
+title_label.pack(pady=10)
 
-# Panel to display the selected image
-panel = tk.Label(window, bg="#f5f5f5")
-panel.pack(padx=10, pady=10)
+# ส่วนแสดงภาพ
+panel = ctk.CTkLabel(bg_frame, text="", width=250, height=250, corner_radius=10, fg_color="white")
+panel.pack(pady=20)
 
-# Browse button to select an image
-browse_button = tk.Button(window, text="Browse", command=browse_image, bg="#4CAF50", fg="white", font=("Arial", 12, "bold"))
+# ปุ่มเลือกไฟล์
+browse_button = ctk.CTkButton(bg_frame, text="📂 เลือกรูปภาพ", command=browse_image, fg_color="#FFA500", text_color="white", font=("Arial", 14, "bold"))
 browse_button.pack(pady=10)
 
-# Recognize button to predict the fruit
-recognize_button = tk.Button(window, text="Recognize", command=recognize_image, bg="#2196F3", fg="white", font=("Arial", 12, "bold"))
+# ปุ่มทำนายผลไม้
+recognize_button = ctk.CTkButton(bg_frame, text="🔍 ทำนายผลไม้", command=recognize_image, fg_color="#008CBA", text_color="white", font=("Arial", 14, "bold"))
 recognize_button.pack(pady=10)
 
-# Label to show the result of the prediction
-result_label = tk.Label(window, text="Predicted Fruit: ", bg="#f5f5f5", font=("Arial", 14))
+# แสดงผลลัพธ์
+result_label = ctk.CTkLabel(bg_frame, text="🔽 รอทำนายผล 🔽", text_color="black", font=("Arial", 16, "bold"))
 result_label.pack(pady=20)
 
-# Variable to store the selected image path
+# ตัวแปรเก็บพาธรูปภาพ
 image_path = None
 
-# Start the GUI event loop
 window.mainloop()
