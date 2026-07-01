@@ -1,0 +1,28 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# ---- Virtual environments ----
+.venv/
+venv/
+env/
+
+# ---- IDE / OS ----
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ---- Secrets ----
+.env
+*.env
+
+# ---- โปรเจกต์นี้: เก็บ model + dataset ไว้บน repo (เป็น demo) ----
+# ถ้าไม่อยากให้ dataset/model ขึ้น GitHub ให้เอา # ออกด้านล่าง
+# thai_fruit_model.keras
+# Ai_image/dataset/
+
+# ---- ไม่เอาไฟล์ zip ต้นฉบับขึ้น (แตกลง dataset แล้ว) ----
+*.zip
