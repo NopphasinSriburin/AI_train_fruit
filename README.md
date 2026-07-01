@@ -1,5 +1,7 @@
 # 🍈 Thai Fruit Recognizer
 
+Link : https://aitrainfruit-myz95uchroiutgqvv3fhff.streamlit.app/
+
 ระบบจำแนกผลไม้ไทยจากภาพด้วย Deep Learning (Transfer Learning บน MobileNetV2)
 รองรับ 6 ชนิด: **jackfruit · long kong · Muntingia · pineapple · rambutan · sapodilla**
 
